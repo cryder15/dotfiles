@@ -481,10 +481,10 @@ require('lazy').setup({
         --
         jsonls = {},
         marksman = {},
-        rubocop = {},
-        ruby_lsp = {
-          capabilities = capabilities,
-        },
+        -- rubocop = {},
+        -- ruby_lsp = {
+        --   capabilities = capabilities,
+        -- },
 
         lua_ls = {
           -- cmd = { ... },

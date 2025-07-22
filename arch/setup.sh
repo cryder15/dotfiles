@@ -55,7 +55,12 @@ sudo pacman -S --needed --noconfirm \
     fd \
     fzf \
     tree-sitter \
-    tree-sitter-cli
+    tree-sitter-cli \
+    unzip \
+    curl \
+    wget \
+    base-devel \
+    rust
 
 # Install Hyprland and Waybar
 log "Installing Hyprland and Waybar..."
