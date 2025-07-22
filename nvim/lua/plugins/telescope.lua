@@ -49,12 +49,20 @@ return {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
       --
-      -- defaults = {
-      --   mappings = {
-      --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-      --   },
-      -- },
+      defaults = {
+        file_ignore_patterns = { "%.git/", "node_modules/" },
+        hidden = true,
+        -- mappings = {
+        --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+        -- },
+      },
       -- pickers = {}
+      pickers = {
+        find_files = {
+          hidden = true,
+          find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+        },
+      },
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
