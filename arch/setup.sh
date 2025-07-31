@@ -60,7 +60,8 @@ sudo pacman -S --needed --noconfirm \
     curl \
     wget \
     base-devel \
-    rust
+    rust \
+    lazygit
 
 # Install Hyprland and Waybar
 log "Installing Hyprland and Waybar..."
@@ -127,35 +128,35 @@ if [[ -f "$HOME/.gitconfig" ]]; then
     cp "$HOME/.gitconfig" "$backup_dir/"
 fi
 
-# Copy dotfiles configurations
-log "Copying dotfiles configurations..."
+# Link dotfiles configurations
+log "Linking dotfiles configurations..."
 
-# Copy Neovim config
+# Link Neovim config
 if [[ -d "$DOTFILES_DIR/nvim" ]]; then
     log "Installing Neovim configuration..."
     rm -rf ~/.config/nvim
-    cp -r "$DOTFILES_DIR/nvim" ~/.config/
-    info "Neovim configuration installed"
+    ln -sf "$DOTFILES_DIR/nvim" ~/.config/nvim
+    info "Neovim configuration linked"
 else
     error "Neovim configuration not found in $DOTFILES_DIR/nvim"
 fi
 
-# Copy Waybar config
+# Link Waybar config
 if [[ -d "$DOTFILES_DIR/waybar/.config/waybar" ]]; then
     log "Installing Waybar configuration..."
     rm -rf ~/.config/waybar
-    cp -r "$DOTFILES_DIR/waybar/.config/waybar" ~/.config/
-    info "Waybar configuration installed"
+    ln -sf "$DOTFILES_DIR/waybar/.config/waybar" ~/.config/waybar
+    info "Waybar configuration linked"
 else
     error "Waybar configuration not found in $DOTFILES_DIR/waybar/.config/waybar"
 fi
 
-# Copy Hyprland config
+# Link Hyprland config
 if [[ -d "$DOTFILES_DIR/hyprland/.config/hypr" ]]; then
     log "Installing Hyprland configuration..."
     rm -rf ~/.config/hypr
-    cp -r "$DOTFILES_DIR/hyprland/.config/hypr" ~/.config/
-    info "Hyprland configuration installed"
+    ln -sf "$DOTFILES_DIR/hyprland/.config/hypr" ~/.config/hypr
+    info "Hyprland configuration linked"
 else
     error "Hyprland configuration not found in $DOTFILES_DIR/hyprland/.config/hypr"
 fi

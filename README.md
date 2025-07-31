@@ -14,10 +14,15 @@ curl -sSL https://raw.githubusercontent.com/cryder15/dotfiles/main/arch/install.
 git clone git@github.com:cryder15/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
-# Copy configurations
-cp -r nvim ~/.config/
-cp -r waybar/.config/waybar ~/.config/
-cp -r hyprland/.config/hypr ~/.config/
+# Backup existing configurations (optional)
+mv ~/.config/nvim ~/.config/nvim.backup 2>/dev/null || true
+mv ~/.config/waybar ~/.config/waybar.backup 2>/dev/null || true
+mv ~/.config/hypr ~/.config/hypr.backup 2>/dev/null || true
+
+# Create symlinks to configurations
+ln -sf ~/dotfiles/nvim ~/.config/nvim
+ln -sf ~/dotfiles/waybar/.config/waybar ~/.config/waybar
+ln -sf ~/dotfiles/hyprland/.config/hypr ~/.config/hypr
 
 # Configure Git
 git config --global user.name "Your Name"
@@ -29,19 +34,28 @@ git config --global core.editor nvim
 
 ### Neovim
 ```bash
-cp -r nvim ~/.config/
+# Backup existing config (optional)
+mv ~/.config/nvim ~/.config/nvim.backup 2>/dev/null || true
+# Create symlink
+ln -sf ~/dotfiles/nvim ~/.config/nvim
 ```
 Modular plugin system with LSP, Telescope, custom keybindings, etc.
 
 ### Waybar
 ```bash
-cp -r waybar/.config/waybar ~/.config/
+# Backup existing config (optional)
+mv ~/.config/waybar ~/.config/waybar.backup 2>/dev/null || true
+# Create symlink
+ln -sf ~/dotfiles/waybar/.config/waybar ~/.config/waybar
 ```
 Status bar for Wayland compositors.
 
 ### Hyprland
 ```bash
-cp -r hyprland/.config/hypr ~/.config/
+# Backup existing config (optional)
+mv ~/.config/hypr ~/.config/hypr.backup 2>/dev/null || true
+# Create symlink
+ln -sf ~/dotfiles/hyprland/.config/hypr ~/.config/hypr
 ```
 Tiling Wayland compositor configuration.
 
