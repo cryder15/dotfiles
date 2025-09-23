@@ -22,7 +22,7 @@ vim.g.maplocalleader = ' '
 
 -- Add current directory's lua folder to runtime path for standalone testing
 -- This ensures custom plugins are found when using nvim -u ./init.lua
-local current_dir = vim.fn.expand('<sfile>:p:h')
+local current_dir = vim.fn.expand '<sfile>:p:h'
 vim.opt.runtimepath:prepend(current_dir)
 -- Also add to package.path for require() to work
 package.path = current_dir .. '/lua/?.lua;' .. current_dir .. '/lua/?/init.lua;' .. package.path
@@ -46,6 +46,9 @@ vim.opt.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
+
+-- Auto reload fles changed outside vim
+vim.autoread = true
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -193,11 +196,6 @@ require('lazy').setup({
   --    }
   --
 
-
-
-
-
-
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -212,18 +210,12 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-
-
-
-
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
   -- you do for a plugin at the top level, you can do for a dependency.
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
-
 
   {
     'christoomey/vim-tmux-navigator',
@@ -728,8 +720,6 @@ require('lazy').setup({
       vim.cmd [[colorscheme visual_studio_code]]
     end,
   },
-
-
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
