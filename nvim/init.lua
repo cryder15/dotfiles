@@ -103,6 +103,12 @@ vim.opt.scrolloff = 10
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+vim.keymap.set('i', 'jj', '<Esc>', {
+  noremap = true,
+  silent = true,
+  desc = 'Escape Insert Mode',
+})
+
 vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { desc = 'Move line down' })
 vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { desc = 'Move line up' })
 vim.keymap.set('v', '<A-j>', ':m .+1<CR>==', { desc = 'Move line down' })
@@ -117,6 +123,14 @@ vim.keymap.set('n', '-', function()
   MiniFiles.open(path)
   MiniFiles.reveal_cwd()
 end, { desc = 'Open Mini Files' })
+
+-- Yank full file path + line number
+vim.keymap.set('n', '<leader>yl', function()
+  local path = vim.fn.expand '%:p'
+  local line = vim.fn.line '.'
+  vim.fn.setreg('+', path .. ':' .. line)
+  print('Yanked: ' .. path .. ':' .. line)
+end, { desc = 'Yank absolute file path + line number' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
