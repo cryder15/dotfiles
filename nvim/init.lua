@@ -47,8 +47,52 @@ vim.opt.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
--- Auto reload fles changed outside vim
-vim.autoread = true
+-- Allow to use ctags in project and gems
+vim.opt.tags:append { './tags', 'tags', './gems.tags', 'gems.tags' }
+
+-- ===================================================================
+-- ==      Reload on Focus, Toggle Diff on Keypress (v2)            ==
+-- ===================================================================
+
+-- Global state to track file times and store the last captured changes.
+local file_mod_times = {}
+_G.LAST_RELOAD_DIFF_CONTENT = nil
+
+-- Helper function to update the stored modification time for a buffer.
+local function update_mod_time(bufnr)
+  local filepath = vim.api.nvim_buf_get_name(bufnr)
+  if filepath ~= '' and vim.fn.filereadable(filepath) == 1 then
+    local stats = vim.loop.fs_stat(filepath)
+    if stats then
+      file_mod_times[bufnr] = stats.mtime.sec
+    end
+  end
+end
+
+-- PART 1: AUTOMATIC RELOAD ON FOCUS
+vim.api.nvim_create_augroup('AutoReloadOnFocus', { clear = true })
+vim.api.nvim_create_autocmd('FocusGained', {
+  group = 'AutoReloadOnFocus',
+  pattern = '*',
+  desc = 'Check for external file changes and reload.',
+  callback = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local filepath = vim.api.nvim_buf_get_name(bufnr)
+
+    if filepath == '' or vim.fn.filereadable(filepath) == 0 then
+      return
+    end
+
+    local last_mtime = file_mod_times[bufnr]
+    local stats = vim.loop.fs_stat(filepath)
+
+    if stats and last_mtime and stats.mtime.sec > last_mtime then
+      _G.LAST_RELOAD_DIFF_CONTENT = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      vim.cmd 'silent! e!'
+    end
+    update_mod_time(bufnr)
+  end,
+})
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -254,7 +298,24 @@ require('lazy').setup({
       { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
     },
   },
+  {
+    'tpope/vim-rails',
+    keys = {
+      { '<leader>s', ':A<cr>', desc = 'Toggle test and code files' },
+    },
+  },
+  { 'vim-ruby/vim-ruby', event = { 'BufReadPost', 'BufNewFile' } },
+  {
+    'ludovicchabant/vim-gutentags',
+    event = { 'BufReadPre', 'BufNewFile' },
+    init = function()
+      -- Set the git command to include submodules
+      vim.g.gutentags_file_list_command = 'git ls-files --recurse-submodules'
 
+      -- (Optional) Keep your ctags path hardcoded here to be safe
+      vim.g.gutentags_ctags_executable = '/opt/homebrew/bin/ctags'
+    end,
+  },
   -- Vim Test
   {
     'vim-test/vim-test',
