@@ -70,6 +70,9 @@ return {
         },
       },
       extensions = {
+        file_browser = {
+          hidden = true,
+        },
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
         },
