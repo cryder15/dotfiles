@@ -30,6 +30,12 @@ package.path = current_dir .. '/lua/?.lua;' .. current_dir .. '/lua/?/init.lua;'
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
+vim.filetype.add {
+  extension = {
+    mmd = 'mermaid',
+  },
+}
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -46,6 +52,9 @@ vim.opt.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
+
+-- use all colors terminal provides
+vim.opt.termguicolors = true
 
 -- Allow to use ctags in project and gems
 vim.opt.tags:append { './tags', 'tags', './gems.tags', 'gems.tags' }
@@ -792,14 +801,6 @@ require('lazy').setup({
   --     vim.cmd.colorscheme 'tokyonight-night'
   --   end,
   -- },
-
-  {
-    'askfiy/visual_studio_code',
-    priority = 100,
-    config = function()
-      vim.cmd [[colorscheme visual_studio_code]]
-    end,
-  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
