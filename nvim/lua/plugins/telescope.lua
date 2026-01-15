@@ -92,6 +92,11 @@ return {
     vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
     vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
     vim.keymap.set('n', '<leader>sg', '<cmd>Telescope live_grep_args<cr>', { desc = '[S]earch [G]rep' })
+    vim.keymap.set('n', '<leader>sG', function()
+      require('telescope.builtin').live_grep {
+        search_dirs = { vim.fn.input('Directory: ', '', 'dir') },
+      }
+    end, { desc = 'Grep in Directory' })
     vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
     vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
     vim.keymap.set('n', '<leader><leader>', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
