@@ -20,9 +20,9 @@ mv ~/.config/waybar ~/.config/waybar.backup 2>/dev/null || true
 mv ~/.config/hypr ~/.config/hypr.backup 2>/dev/null || true
 
 # Create symlinks to configurations
-ln -sf ~/dotfiles/nvim ~/.config/nvim
-ln -sf ~/dotfiles/waybar/.config/waybar ~/.config/waybar
-ln -sf ~/dotfiles/hyprland/.config/hypr ~/.config/hypr
+ln -sf <base_location>/dotfiles/nvim ~/.config/nvim
+ln -sf <base_location>/dotfiles/waybar/.config/waybar ~/.config/waybar
+ln -sf <base_location>/dotfiles/hyprland/.config/hypr ~/.config/hypr
 
 # Configure Git
 git config --global user.name "Your Name"
