@@ -55,7 +55,7 @@ Status bar for Wayland compositors.
 # Backup existing config (optional)
 mv ~/.config/hypr ~/.config/hypr.backup 2>/dev/null || true
 # Create symlink
-ln -sf ~/dotfiles/hyprland/.config/hypr ~/.config/hypr
+ln -sf ~/dotfiles/hypr ~/.config/hypr
 ```
 Tiling Wayland compositor configuration.
 
