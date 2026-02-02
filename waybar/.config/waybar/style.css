@@ -325,3 +325,13 @@ label:focus {
 #privacy-item.audio-out {
     background-color: #0069d4;
 }
+
+#mpris {
+    color: #1DB954;
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+#mpris.paused {
+    color: #999999;
+}
