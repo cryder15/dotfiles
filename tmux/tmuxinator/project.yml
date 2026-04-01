@@ -1,0 +1,10 @@
+name: PROJECT_NAME
+root: ~/code/PROJECT_NAME
+
+windows:
+  - editor: nvim .
+  - agent: agent
+  - server: bundle exec rails s
+  - console: bundle exec rails c
+  - random:
+  - random2:
