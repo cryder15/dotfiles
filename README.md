@@ -80,9 +80,24 @@ Tiling Wayland compositor configuration.
 
 ## Dependencies
 
+### Neovim Requirements
+The following tools are required for full Neovim functionality:
+
+| Tool | Purpose | Required By |
+|------|---------|-------------|
+| `ripgrep` | Fast file search and grep | Telescope |
+| `make` | Build native extensions | telescope-fzf-native |
+| `universal-ctags` | Code navigation/tags | vim-gutentags |
+| `node` / `npm` | JavaScript runtime | markdown-preview.nvim |
+
+### macOS (Homebrew)
+```bash
+brew install neovim ripgrep make universal-ctags node
+```
+
 ### Arch Linux
 ```bash
-sudo pacman -S neovim hyprland waybar git nodejs npm python
+sudo pacman -S neovim ripgrep make ctags nodejs npm hyprland waybar git python
 ```
 
 ### Other Distributions
