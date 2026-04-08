@@ -318,7 +318,7 @@ require('lazy').setup({
     'ludovicchabant/vim-gutentags',
     event = { 'BufReadPre', 'BufNewFile' },
     init = function()
-      vim.g.gutentags_file_list_command = 'git ls-files --recurse-submodules --others --exclude-standard'
+      vim.g.gutentags_file_list_command = 'git ls-files'
 
       -- (Optional) Keep your ctags path hardcoded here to be safe
       vim.g.gutentags_ctags_executable = '/opt/homebrew/bin/ctags'
