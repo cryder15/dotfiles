@@ -65,7 +65,10 @@ return {
       pickers = {
         find_files = {
           hidden = true,
-          find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' },
+          find_command = { 'rg', '--files', '--hidden', '--no-ignore-vcs', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' },
+        },
+        live_grep = {
+          additional_args = { '--hidden', '--no-ignore-vcs', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' },
         },
       },
       extensions = {
@@ -74,6 +77,23 @@ return {
         },
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
+        },
+        live_grep_args = {
+          auto_quoting = true,
+          default_mappings = {},
+          vimgrep_arguments = {
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+            '--hidden',
+            '--no-ignore-vcs',
+            '--glob', '!**/.git/*',
+            '--glob', '!**/node_modules/*',
+          },
         },
       },
     }
