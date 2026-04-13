@@ -6,6 +6,7 @@ return {
     'nvim-telescope/telescope.nvim',
   },
   opts = {
+    kind = 'floating',
     integrations = {
       diffview = true,
       telescope = true,
