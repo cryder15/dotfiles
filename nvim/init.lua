@@ -185,6 +185,14 @@ vim.keymap.set('n', '<leader>yl', function()
   print('Yanked: ' .. path .. ':' .. line)
 end, { desc = 'Yank absolute file path + line number' })
 
+-- Yank last 50 lines of :messages to clipboard
+vim.keymap.set('n', '<leader>ym', function()
+  local messages = vim.split(vim.fn.execute 'messages', '\n')
+  local last = vim.list_slice(messages, math.max(1, #messages - 49))
+  vim.fn.setreg('+', table.concat(last, '\n'))
+  print('Yanked ' .. #last .. ' message lines')
+end, { desc = 'Yank last 50 :messages to clipboard' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
