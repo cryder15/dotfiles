@@ -65,10 +65,10 @@ return {
       pickers = {
         find_files = {
           hidden = true,
-          find_command = { 'rg', '--files', '--hidden', '--no-ignore-vcs', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' },
+          find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' },
         },
         live_grep = {
-          additional_args = { '--hidden', '--no-ignore-vcs', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' },
+          additional_args = { '--hidden', '--glob', '!**/.git/*' },
         },
       },
       extensions = {
@@ -90,9 +90,7 @@ return {
             '--column',
             '--smart-case',
             '--hidden',
-            '--no-ignore-vcs',
             '--glob', '!**/.git/*',
-            '--glob', '!**/node_modules/*',
           },
         },
       },

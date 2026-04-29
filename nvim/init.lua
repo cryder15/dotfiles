@@ -103,6 +103,39 @@ vim.api.nvim_create_autocmd('FocusGained', {
   end,
 })
 
+-- ===================================================================
+-- ==                Big-file guard (skip heavy stuff)              ==
+-- ===================================================================
+local bigfile_threshold = 512 * 1024 -- 512 KB
+
+vim.api.nvim_create_augroup('BigFileGuard', { clear = true })
+vim.api.nvim_create_autocmd('BufReadPre', {
+  group = 'BigFileGuard',
+  callback = function(args)
+    local ok, stats = pcall(vim.loop.fs_stat, args.match)
+    if ok and stats and stats.size > bigfile_threshold then
+      vim.b[args.buf].large_buf = true
+      vim.opt_local.swapfile = false
+      vim.opt_local.foldmethod = 'manual'
+      vim.opt_local.undolevels = -1
+      vim.opt_local.list = false
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  group = 'BigFileGuard',
+  callback = function(args)
+    if vim.b[args.buf].large_buf then
+      vim.cmd 'syntax clear'
+      pcall(vim.treesitter.stop, args.buf)
+      vim.schedule(function()
+        vim.lsp.stop_client(vim.lsp.get_clients { bufnr = args.buf })
+      end)
+    end
+  end,
+})
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -321,15 +354,25 @@ require('lazy').setup({
       { '<leader>s', ':A<cr>', desc = 'Toggle test and code files' },
     },
   },
-  { 'vim-ruby/vim-ruby', event = { 'BufReadPost', 'BufNewFile' } },
   {
     'ludovicchabant/vim-gutentags',
     event = { 'BufReadPre', 'BufNewFile' },
     init = function()
       vim.g.gutentags_file_list_command = 'git ls-files'
-
-      -- (Optional) Keep your ctags path hardcoded here to be safe
       vim.g.gutentags_ctags_executable = '/opt/homebrew/bin/ctags'
+
+      vim.g.gutentags_cache_dir = vim.fn.stdpath 'cache' .. '/ctags'
+      vim.fn.mkdir(vim.g.gutentags_cache_dir, 'p')
+
+      vim.g.gutentags_ctags_exclude = {
+        'log', 'tmp', 'public', 'vendor', 'coverage', 'node_modules',
+        'db/migrate', '.git', '.bundle', 'spec/output',
+        '*.min.js', '*.min.css', '*.map', '*.lock',
+        'package-lock.json', 'yarn.lock', 'Gemfile.lock',
+        'public/packs*', 'public/assets',
+      }
+
+      vim.g.gutentags_exclude_project_root = { '/Users/chad/code/dotfiles' }
     end,
   },
   -- Vim Test
@@ -646,7 +689,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, gitcommit = true, gitrebase = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
