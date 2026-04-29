@@ -249,6 +249,15 @@ vim.keymap.set('n', '<c-l>', ':wincmd l<CR>', { desc = 'Move focus to the right 
 vim.keymap.set('n', '<c-j>', ':wincmd j<CR>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<c-k>', ':wincmd k<CR>', { desc = 'Move focus to the upper window' })
 
+-- Open recent files picker when nvim starts with no args
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    if vim.fn.argc() == 0 then
+      require('telescope.builtin').oldfiles()
+    end
+  end,
+})
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
