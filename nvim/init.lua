@@ -20,6 +20,13 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Disable unused remote-plugin providers (silences :checkhealth warnings)
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+
+-- Pin python3 host so asdf shim flips don't break pynvim
+vim.g.python3_host_prog = vim.fn.expand('~/.local/bin/pynvim-python')
+
 -- Add current directory's lua folder to runtime path for standalone testing
 -- This ensures custom plugins are found when using nvim -u ./init.lua
 local current_dir = vim.fn.expand '<sfile>:p:h'
@@ -33,6 +40,7 @@ vim.g.have_nerd_font = false
 vim.filetype.add {
   extension = {
     mmd = 'mermaid',
+    mdx = 'markdown.mdx',
   },
 }
 
