@@ -402,7 +402,7 @@ require('lazy').setup({
     vim.keymap.set('n', '<leader>T', ':TestFile<CR>'),
     vim.keymap.set('n', '<leader>a', ':TestSuite<CR>'),
     vim.keymap.set('n', '<leader>l', ':TestLast<CR>'),
-    vim.keymap.set('n', '<leader>g', ':TestVisit<CR>'),
+    vim.keymap.set('n', '<leader>G', ':TestVisit<CR>'),
     vim.cmd "let test#strategy = 'vimux'",
   },
   -- LSP Plugins
