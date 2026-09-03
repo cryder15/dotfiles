@@ -41,6 +41,9 @@ vim.filetype.add {
   extension = {
     mmd = 'mermaid',
     mdx = 'markdown.mdx',
+    jsonl = 'jsonl',
+    jsonlines = 'jsonl',
+    ndjson = 'jsonl',
   },
 }
 
@@ -912,9 +915,43 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter').setup {
-        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'ruby', 'vim', 'vimdoc' },
-        auto_install = true,
+      -- Register the jsonl grammar (not a built-in nvim-treesitter language).
+      -- `install()`/`update()` reload and re-require the parsers module, wiping
+      -- one-off assignments, so registration has to live in this autocmd
+      -- rather than run once here. See nvim-treesitter's "Adding custom
+      -- languages" docs.
+      --
+      -- Uses a local clone (`install_info.path`) rather than `url`/`branch`:
+      -- nvim-treesitter's remote installer assumes GitHub's archive naming
+      -- convention (`repo-branch/`), but Codeberg's tarballs extract to a
+      -- bare `repo/`, so the download succeeds but the rename afterwards
+      -- fails with ENOENT.
+      local jsonl_grammar_dir = vim.fn.stdpath 'data' .. '/tree-sitter-jsonl'
+      if not (vim.uv or vim.loop).fs_stat(jsonl_grammar_dir) then
+        vim.fn.system { 'git', 'clone', '--depth=1', 'https://codeberg.org/kristoferssolo/tree-sitter-jsonl.git', jsonl_grammar_dir }
+      end
+
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'TSUpdate',
+        callback = function()
+          require('nvim-treesitter.parsers').jsonl = {
+            install_info = { path = jsonl_grammar_dir },
+          }
+        end,
+      })
+
+      -- The rewritten nvim-treesitter no longer auto-starts highlighting.
+      -- pcall guards the very first open, before the async install above
+      -- finishes and the parser actually exists.
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'jsonl',
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
+      })
+
+      require('nvim-treesitter').install {
+        'bash', 'c', 'diff', 'html', 'json', 'jsonl', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'ruby', 'vim', 'vimdoc',
       }
     end,
   },
